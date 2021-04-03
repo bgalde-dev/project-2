@@ -9,56 +9,35 @@ function buildCharts(sample) {
     // Data Samples
     d3.csv("data/average_salary.csv", function (data) {
         var sampleInfo = data.average_salary;
-        console.log(sampleInfo)
+        console.log(sampleInfo);
 
         // Filter object by ID Industry Group
         var results = sampleInfo.filter(sampleObj => sampleObj.IDIndustryGroup == sample)[0];
-        console.log(results)
+        console.log(results);
 
-        // // Set variables 
-        // var sampleValues = results.sample_values.slice(0, 10).reverse();
-        // console.log(sampleValues);
-
-        // var otuIDs = results.otu_ids;
-        // console.log(otuIDs);
+        // Set variables xaxis (average salary)
+        var averageSalary = results.sample_values.slice(0, 10).reverse();
+        console.log(averageSalary);
 
         // var otuLabels = results.otu_labels.slice(0, 10).reverse();
         // console.log(otuLabels);
 
+        // y (industries name)
         // var yticks = otuIDs.map(sampleObj => "OTU " + sampleObj).slice(0,10).reverse();
         
-        // // Bar chart
-        // var barData = [{
-        //     x: sampleValues,
-        //     y: yticks,
-        //     text: otuLabels,
+        // Bar chart
+        var barData = [{
+            x: averageSalary
+            // y: yticks, 
+        //     text: otuLabels, 
         //     type: "bar",
-        //     orientation: "h"
+            // orientation: "h"
 
-        // }];
+        }];
 
-        // //Plot
-        // Plotly.newPlot("bar", barData);
+        //Plot
+        Plotly.newPlot("bar", barData);
 
-        // // Bubble Chart
-        // d3.json("samples.json").then((data) => {
-        //     var sampleInfo = data.samples;
-        //     var results = sampleInfo.filter(sampleObj => sampleObj.id == sample)[0];
-            
-        //     var bubbleData =  [{
-        //         x: results.otu_ids,
-        //         y: results.sample_values,
-        //         mode: "markers",
-        //         text: results.otu_labels,
-        //         marker: {
-        //             size: results.sample_values,
-        //             color: results.otu_ids
-        //          }
-        //     }]; 
-        
-        //     //Plot
-        //     Plotly.newPlot("bubble", bubbleData);
-        // });
     });
 }
 
