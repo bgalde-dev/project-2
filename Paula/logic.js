@@ -1,48 +1,45 @@
 //  Read in average_salary.csv
 d3.csv("data/average_salary.csv").then(function (data) {
     console.log(data);
-    // buildCharts("722")
+    buildCharts(data)
 });
 
 // Build Chart
-function buildCharts(IDIndustryGroup) {
+function buildCharts(data) {
 
-    // Data Samples
-    d3.csv("data/average_salary.csv").then(function (data) {
-        var object = data;
-        console.log(object);
+    // Filter object by ID Industry Group
+    var results = d3.nest()
+        .key(d => d["IndustryGroup"])
+        .rollup(v => d3.mean(v, a => a.AverageWage)).sortValues()
+        .entries(data)
 
-        
-        // Filter object by ID Industry Group
-        var results = object.groupBy(IDIndustryGroup)[0];
-        console.log(results);
+    results.sort((a, b) => (a.value > b.value) ? 1 : -1);
+    
+    console.log(results);
 
-        // Set variables xaxis (average salary)
-        var averageSalary = results.AverageWage;
-        console.log(averageSalary);
+    // x
+    var names = results.map(r => r.key);
 
+    // y
+    var averageWage = results.map(r => r.value);
 
-        // y (industries name)
-        var yticks = results.IDIndustryGroup.slice(0,10).reverse();
-        console.log(yticks);
+    console.log(names);
 
-        var labels = results.IndustryGroup.slice(0, 10).reverse();
-        console.log(labels);
+    console.log(averageWage);
 
-        // Bar chart
-        var barData = {
-            x: averageSalary,
-            y: yticks, 
-            text: labels, 
-            type: "bar",
-            orientation: "h"
+    // Bar chart
+    var barData = [{
+        x: averageWage,
+        y: names,
+        text: names,
+        type: "bar",
+        orientation: "h"
 
-        };
+    }];
 
-        //Plot
-        Plotly.newPlot("bar", barData);
+    //Plot
+    Plotly.newPlot("bar", barData);
 
-    });
 }
 
 
