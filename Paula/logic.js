@@ -1,48 +1,95 @@
 //  Read in average_salary.csv
 d3.csv("data/average_salary.csv").then(function (data) {
     console.log(data);
-    // buildCharts("722")
+    buildCharts(data)
 });
 
 // Build Chart
-function buildCharts(IDIndustryGroup) {
+function buildCharts(data) {
 
-    // Data Samples
-    d3.csv("data/average_salary.csv").then(function (data) {
-        var object = data;
-        console.log(object);
+    // Create objects with Industry Group and Average Wage
+    var results = d3.nest()
+        .key(d => d["IndustryGroup"])
+        .rollup(v => d3.mean(v, a => a.AverageWage))
+        .entries(data)
 
-        
-        // Filter object by ID Industry Group
-        var results = object.groupBy(IDIndustryGroup)[0];
-        console.log(results);
+    results.sort((a, b) => (a.value > b.value) ? 1 : -1);
 
-        // Set variables xaxis (average salary)
-        var averageSalary = results.AverageWage;
-        console.log(averageSalary);
+    console.log(results);
 
+    // x
+    var names = results.map(r => r.key).slice(0, 10);
 
-        // y (industries name)
-        var yticks = results.IDIndustryGroup.slice(0,10).reverse();
-        console.log(yticks);
+    // y
+    var averageWage = results.map(r => r.value).slice(0, 10);
 
-        var labels = results.IndustryGroup.slice(0, 10).reverse();
-        console.log(labels);
+    console.log(names);
 
-        // Bar chart
-        var barData = {
-            x: averageSalary,
-            y: yticks, 
-            text: labels, 
-            type: "bar",
-            orientation: "h"
+    console.log(averageWage);
 
-        };
+    // Bar chart
+    var barData = [{
+        x: averageWage,
+        y: names,
+        text: names,
+        type: "bar",
+        orientation: "h"
+    }]
 
-        //Plot
-        Plotly.newPlot("bar", barData);
+    var layout = {
+        title: 'Average Salary by Industry',
+    };
 
-    });
+    //Plot
+    Plotly.newPlot("bar", barData, layout, { displayModeBar: true });
+
 }
 
 
+
+// // Drop down menu
+// function init() {
+//     var dropDown = d3.selectAll("#selDataset");
+
+//     // Add sample names to a variable
+//     d3.csv("data/average_salary.csv").then(function (data) {
+//         var years = data.IDYear;
+
+//         d3.forEach((sample) => {
+//             dropDown
+//                 .append("option")
+//                 .text(sample)
+//                 .property("value", sample);
+//         });
+
+//         var firstSample = years[0];
+//         buildCharts(firstSample);
+//         buildMetadata(firstSample);
+
+//     });
+// }
+
+// function optionChanged(newSample) {
+//     buildCharts(newSample);
+//     buildMetadata(newSample);
+// }
+
+// init();
+
+// // Display the sample Metadata
+// function buildMetadata(data) {
+//     d3.csv("data/average_salary.csv").then(function (data) {
+//         var sampleMeta = data.metadata;
+        
+//         var results = sampleMeta.filter(sampleObj => sampleObj.id == data)[0];
+
+//         var panelData = d3.select("#sample-metadata");
+
+//         panelData.html("");
+
+//         Object.entries(results).forEach(([key, value]) => {
+//             panelData.append("h6").text(`${key} : ${value}`);
+
+//         });
+//     });
+// }
