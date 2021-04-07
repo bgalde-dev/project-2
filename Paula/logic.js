@@ -35,14 +35,61 @@ function buildCharts(data) {
         type: "bar",
         orientation: "h"
     }]
-    
+
     var layout = {
-        title: 'Average Salary by Industry',    
+        title: 'Average Salary by Industry',
     };
 
     //Plot
-    Plotly.newPlot("bar", barData, layout, {displayModeBar: true});
+    Plotly.newPlot("bar", barData, layout, { displayModeBar: true });
 
 }
 
 
+
+// // Drop down menu
+// function init() {
+//     var dropDown = d3.selectAll("#selDataset");
+
+//     // Add sample names to a variable
+//     d3.csv("data/average_salary.csv").then(function (data) {
+//         var years = data.IDYear;
+
+//         d3.forEach((sample) => {
+//             dropDown
+//                 .append("option")
+//                 .text(sample)
+//                 .property("value", sample);
+//         });
+
+//         var firstSample = years[0];
+//         buildCharts(firstSample);
+//         buildMetadata(firstSample);
+
+//     });
+// }
+
+// function optionChanged(newSample) {
+//     buildCharts(newSample);
+//     buildMetadata(newSample);
+// }
+
+// init();
+
+// // Display the sample Metadata
+// function buildMetadata(data) {
+//     d3.csv("data/average_salary.csv").then(function (data) {
+//         var sampleMeta = data.metadata;
+        
+//         var results = sampleMeta.filter(sampleObj => sampleObj.id == data)[0];
+
+//         var panelData = d3.select("#sample-metadata");
+
+//         panelData.html("");
+
+//         Object.entries(results).forEach(([key, value]) => {
+//             panelData.append("h6").text(`${key} : ${value}`);
+
+//         });
+//     });
+// }
