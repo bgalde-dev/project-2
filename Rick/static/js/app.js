@@ -10,6 +10,7 @@ function optionChanged(yearChange) {
         let first = true;
         let currMajor = "";
         let totalMajor = 0;
+        let totalPop = 0;
 
         for (let i = 0; i < importedData.length; i++) {
             if (importedData[i].Year == yearChange) {
@@ -40,10 +41,10 @@ function optionChanged(yearChange) {
                     {
 
                         occupations[importedData[i]["Major Occupation Group"]][[importedData[i]["Detailed Occupation"]]] = parseInt(importedData[i]["Total Population"]);
+                        totalPop += parseInt(importedData[i]["Total Population"]);
                     }
 
                     totalMajor += parseInt(importedData[i]["Total Population"]);
-
                     
                  }
 
@@ -51,9 +52,11 @@ function optionChanged(yearChange) {
 
             occupations[currMajor]["Total Major"] = totalMajor;
             console.log(occupations);
+            console.log(totalPop);
+
 
             var treeData = [
-                {name: "Occupation by Share", children: []}
+                {name: `Total Population ${totalPop}`, children: []}
             ];
 
             console.log(Object.keys(occupations));
@@ -81,7 +84,6 @@ function optionChanged(yearChange) {
                 }
                 
              }
-
              console.log(treeData);
 
              anychart.onDocumentReady(function() {
@@ -94,22 +96,41 @@ function optionChanged(yearChange) {
 
                 var chart = anychart.treeMap(tree);
 
-                chart.title("Occupations by Share in the Food/Service Industry");
-
-                chart.container("interactive");
-
-                chart.draw();
+                chart.title(`Occupations by Share in the Food/Service Industry ${yearChange}`);
 
                 chart.hintDepth(1);
 
-                chart.hintOpacity(0.3);
+                chart.hintOpacity(0.5);
 
-                chart.hovered().fill("silver", 0.2);
+                chart.hovered().fill("red", 0.4);
                 chart.selected().fill("silver", 0.6);
                 chart.selected().hatchFill("backward-diagonal", "silver", 2, 20);
-                chart.normal().stroke("silver");
+                chart.normal().stroke("yellow");
                 chart.hovered().stroke("gray", 2);
                 chart.selected().stroke("gray", 2);
+
+                // enable HTML in the chart title
+                chart.title().useHtml(true);
+                // configure the chart title
+                chart.title(
+                "<span style='font-size:18; font-style:bold'>Occupations by Share</span><br><i><span style='font-size:14; font-style:italic'>in the Food/Service Industry (%)</i>"
+                );
+
+                // enable HTML in the chart tooltips
+                chart.tooltip().useHtml(false);
+                // configure the chart tooltips
+                chart.tooltip().format(function() {
+
+                    var value = ((this.value)/totalPop)*100;
+                    var percent = value.toFixed(2)+"%";
+                    return percent;
+
+                  });
+                chart.tooltip().background().fill("maroon");    
+                                
+                chart.container("interactive");
+
+                chart.draw();
 
              });
 
