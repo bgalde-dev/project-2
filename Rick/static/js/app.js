@@ -99,7 +99,7 @@ function optionChanged(yearChange) {
                     return percent;
 
                   });
-                chart.tooltip().background().fill("maroon");    
+                chart.tooltip().background().fill("black");    
                                 
                 chart.container("interactive");
 
