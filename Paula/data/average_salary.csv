@@ -1,4 +1,4 @@
-ID Industry Group,Industry Group,ID Year,Year,ID Workforce Status,Workforce Status,Average Wage,Average Wage Appx MOE,Record Count,Slug Industry Group
+IDIndustryGroup,IndustryGroup,IDYear,Year,IDWorkforceStatus,WorkforceStatus,AverageWage,AverageWageAppxMOE,RecordCount,SlugIndustryGroup
 "111","Farming",2019,"2019","true","true",36665.272304236954,1203.9028129915555,8748,"farming"
 "112","Animal production & aquaculture",2019,"2019","true","true",36287.45203407331,1638.4873722453726,4471,"animal-production-aquaculture"
 "1133","Logging",2019,"2019","true","true",41511.59818784419,2948.3066633281146,893,"logging"
