@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="row text-center">
+  <h1>{{ title}}</h1>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 jumbotron text-center">
+      <h1>Service Industry Dashboard</h1>
+      <p>Year: <select id="selDataset" onchange="optionChanged(this.value)"></select></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12"><h2>Diversity</h2></div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div id="gauge"></div>
+    </div>
+    <div class="col-md-6">
+      <div id="bubble"></div>
+    </div>
+  </div>
+</div>
+
+<br /><br />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text" src="/data/GenderComposition.csv"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/diversity.js"></script>
+{% endblock %}
