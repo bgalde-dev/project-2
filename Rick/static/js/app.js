@@ -9,31 +9,16 @@ function optionChanged(yearChange) {
         occupations = {};
         let first = true;
         let currMajor = "";
-        let totalMajor = 0;
         let totalPop = 0;
 
         for (let i = 0; i < importedData.length; i++) {
             if (importedData[i].Year == yearChange) {
 
-                // console.log(importedData[i]["Major Occupation Group"]);
-                // console.log(importedData[i]["Detailed Occupation"]);
-                // console.log(importedData[i]["Total Population"]);
 
                     if (!(importedData[i]["Major Occupation Group"] in occupations)) {
 
-                        // new major
-                        if (first) {
-                        first = false;
-                        }
-
-                        else {
-                        occupations[currMajor]["Total Major"] = totalMajor;
-                        totalMajor = 0;
-                        }
-
                         occupations[importedData[i]["Major Occupation Group"]] = {};
                         occupations[importedData[i]["Major Occupation Group"]["Detailed Occupation"]] = parseInt(importedData[i]["Total Population"]);
-                        currMajor = importedData[i]["Major Occupation Group"];
                         
                     }
 
@@ -41,22 +26,20 @@ function optionChanged(yearChange) {
                     {
 
                         occupations[importedData[i]["Major Occupation Group"]][[importedData[i]["Detailed Occupation"]]] = parseInt(importedData[i]["Total Population"]);
-                        totalPop += parseInt(importedData[i]["Total Population"]);
                     }
-
-                    totalMajor += parseInt(importedData[i]["Total Population"]);
                     
+                    totalPop += parseInt(importedData[i]["Total Population"]);
+
                  }
 
             }
 
-            occupations[currMajor]["Total Major"] = totalMajor;
             console.log(occupations);
             console.log(totalPop);
 
 
             var treeData = [
-                {name: `Total Population ${totalPop}`, children: []}
+                {name: `Total Population: ${totalPop}`, children: []}
             ];
 
             console.log(Object.keys(occupations));
@@ -71,11 +54,8 @@ function optionChanged(yearChange) {
 
                         for (let dKey in occupations[key]) {
 
-                            if (dKey != "Total Major") {
+                            treeData[0]["children"][k]["children"].push({name: dKey, value: ((occupations[key][dKey]))});
 
-                                treeData[0]["children"][k]["children"].push({name: dKey, value: ((occupations[key][dKey]))});
-
-                            }
 
                         }
 
@@ -108,13 +88,6 @@ function optionChanged(yearChange) {
                 chart.normal().stroke("yellow");
                 chart.hovered().stroke("gray", 2);
                 chart.selected().stroke("gray", 2);
-
-                // enable HTML in the chart title
-                chart.title().useHtml(true);
-                // configure the chart title
-                chart.title(
-                "<span style='font-size:18; font-style:bold'>Occupations by Share</span><br><i><span style='font-size:14; font-style:italic'>in the Food/Service Industry (%)</i>"
-                );
 
                 // enable HTML in the chart tooltips
                 chart.tooltip().useHtml(false);
