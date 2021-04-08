@@ -24,20 +24,30 @@ d3.json(geoData, function (data) {
   d3.csv("Data/wage_by_location.csv", function (locData) {
     console.log(locData);
     console.log(data);
+    const locDataMap = new Map();
+
     for (let i = 0; i < locData.length; i++) {
       const element = locData[i];
-      const pumaId = element["ID PUMA"];
-      const avgWage = element["Average Wage"];
-      // @ TODO FIND THE CORRECT FEATURE AND SET THE PROPERTY
+      //console.log(element);
+      const pumaId = element.IDPUMA;
+      const avgWage = Math.round(element.AverageWage);
+      locDataMap.set(pumaId, avgWage);
+      // @TODO FIND THE CORRECT FEATURE AND SET THE PROPERTY
       //data.features.properties.AVGWAGE = avgWage
     }
-
+    console.log(data.features);
+    for (let j = 0; j < data.features.length; j++) {
+      const element = data.features[j];
+      if (j < 5) {console.log(element)}
+      element.properties.AVGWAGE = locDataMap.get(element.properties.AFFGEOID10);
+    }
+    console.log(data);
 
     // Create a new choropleth layer
     geojson = L.choropleth(data, {
 
       // Define what  property in the features to use
-      valueProperty: "PUMACE10",
+      valueProperty: "AVGWAGE",
 
       // Set color scale
       scale: ["#ffffb2", "#b10026"],
@@ -56,8 +66,8 @@ d3.json(geoData, function (data) {
 
       // Binding a pop-up to each layer
       onEachFeature: function (feature, layer) {
-        layer.bindPopup("Name: " + feature.properties.NAME10 + "<br>PUMA ID:<br>" +
-          "$" + feature.properties.AFFGEOID10);
+        layer.bindPopup("Name: " + feature.properties.NAME10 + "<br>Average Wage:<br>" +
+          "$" + feature.properties.AVGWAGE);
       }
 
     }).addTo(myMap);
