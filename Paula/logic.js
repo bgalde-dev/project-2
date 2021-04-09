@@ -31,14 +31,24 @@ function buildCharts(data) {
     var barData = [{
         x: averageWage,
         y: names,
-        text: names,
         type: "bar",
+        name: '',
+        text: names,
+        textposition: 'auto',
+        marker: {
+            color: 'rgb(0,0,102)',
+            opacity: 0.7
+        },
         orientation: "h"
     }]
 
     var layout = {
         title: 'Average Salary by Industry',
     };
+
+    // barData.marker.color = barData.y.map(function (v) {
+    //     return v == "Restaurants & Food Services" ? 'red' : 'blue'
+    //   });
 
     //Plot
     Plotly.newPlot("bar", barData, layout, { displayModeBar: true });
