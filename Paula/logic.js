@@ -35,6 +35,7 @@ function buildCharts(data) {
         name: '',
         text: names,
         textposition: 'auto',
+        
         marker: {
             color: 'rgb(0,0,102)',
             opacity: 0.7
@@ -43,13 +44,11 @@ function buildCharts(data) {
     }]
 
     var layout = {
-        title: 'Average Salary by Industry',
+        title: 'Average Salary by Industry Group',
+            subtitle: 'Botton 10 of a list of 284 Industries'
     };
 
-    // barData.marker.color = barData.y.map(function (v) {
-    //     return v == "Restaurants & Food Services" ? 'red' : 'blue'
-    //   });
-
+    
     //Plot
     Plotly.newPlot("bar", barData, layout, { displayModeBar: true });
 
