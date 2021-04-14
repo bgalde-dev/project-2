@@ -13,7 +13,7 @@ class DBConnector:
         self.config = None
         self.db = None
         # Get the config file
-        with open("config.json", "r") as jsonfile:
+        with open("./src/config.json", "r") as jsonfile:
             self.config = json.load(jsonfile) # Reading the file
             print("Config file loading successful")
             jsonfile.close()

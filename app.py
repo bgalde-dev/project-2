@@ -2,11 +2,11 @@ from flask import Flask, render_template, redirect
 import pandas as pd
 import os
 import sys
+import src.db_connect as db
 
-import db_connect
 
-template_dir = os.path.abspath('../../resources/templates')
-static_dir = os.path.abspath('../../resources/static')
+template_dir = os.path.abspath('./resources/templates')
+static_dir = os.path.abspath('./resources/static')
 cwd = os.getcwd()
 print("Current Working Dir: " + str(cwd))
 print("Template Dir: " + template_dir)
@@ -19,7 +19,7 @@ app = Flask(__name__,
             template_folder=template_dir)
 
 # DB Connector
-my_connection = db_connect.DBConnector() 
+my_connection = db.DBConnector() 
 
 # Route to render index.html template using data from Mongo
 @app.route("/")
