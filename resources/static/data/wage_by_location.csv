@@ -1,4 +1,4 @@
-ID PUMA,PUMA,ID Year,Year,Average Wage,Average Wage Appx MOE,Record Count,Slug PUMA,PUMS Industry,ID PUMS Industry,Slug PUMS Industry
+IDPUMA,PUMA,IDYear,Year,AverageWage,AverageWageAppxMOE,RecordCount,SlugPUMA,PUMSIndustry,IDPUMSIndustry,SlugPUMSIndustry
 "79500US7200101","Carr 2-Carr 111 PUMA, PR",2019,"2019",6882.541134185303,2504.8536718412693,13,"carr-2-carr-111-puma-pr","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US7200102","Carr 2 (Noroeste) PUMA, PR",2019,"2019",11273.548933683904,6609.082640994086,22,"carr-2-noroeste-puma-pr","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US7200201","Carr 2-Carr 100 PUMA, PR",2019,"2019",14789.78891566265,13378.708623235108,14,"carr-2-carr-100-puma-pr","Restaurants & Food Services","722Z","restaurants-food-services"
@@ -13210,7 +13210,7 @@ ID PUMA,PUMA,ID Year,Year,Average Wage,Average Wage Appx MOE,Record Count,Slug P
 "79500US3400302","Rutherford, North Arlington & Hasbrouck Heights Boroughs PUMA, NJ",2014,"2014",10439.058396946564,6067.715439641057,22,"rutherford-north-arlington-hasbrouck-heights-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US3400303","Fort Lee, Cliffside Park & Palisades Park Boroughs PUMA, NJ",2014,"2014",18512.845600920067,10810.497652541333,29,"fort-lee-cliffside-park-palisades-park-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US3400304","Fair Lawn Borough, Garfield City & Lodi Borough PUMA, NJ",2014,"2014",15162.117109144543,7434.525829274107,27,"fair-lawn-borough-garfield-city-lodi-borough-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
-"79500US3400305","Tenafly, Park Ridge & Cresskill Boroughs PUMA, NJ",2014,"2014",115752.77460168698,111293.44705312638,20,"tenafly-park-ridge-cresskill-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
+"79500US3400305","Tenafly, Park Ridge & Cresskill Boroughs PUMA, NJ",2014,"2014",15752.77460168698,111293.44705312638,20,"tenafly-park-ridge-cresskill-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US3400306","Ramsey, Oakland & Franklin Lakes Boroughs PUMA, NJ",2014,"2014",13201.737992971495,18159.35671774159,33,"ramsey-oakland-franklin-lakes-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US3400307","Bergenfield, Paramus, Dumont & New Milford Boroughs PUMA, NJ",2014,"2014",24287.22888440473,12947.327471904882,35,"bergenfield-paramus-dumont-new-milford-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
 "79500US3400308","Ridgewood Village, Glen Rock & Westwood Boroughs PUMA, NJ",2014,"2014",10153.770707070707,6541.303372247031,16,"ridgewood-village-glen-rock-westwood-boroughs-puma-nj","Restaurants & Food Services","722Z","restaurants-food-services"
