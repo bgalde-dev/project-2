@@ -4,7 +4,6 @@ import os
 import sys
 import src.db_connect as db
 
-
 template_dir = os.path.abspath('./resources/templates')
 static_dir = os.path.abspath('./resources/static')
 cwd = os.getcwd()
