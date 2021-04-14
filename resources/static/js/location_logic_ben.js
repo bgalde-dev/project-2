@@ -15,27 +15,25 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(myMap);
 
 // Load in geojson data
-var geoData = "Data/2019_PUMA.json";
+var geoData = "data/2019_PUMA.geoJson";
 
 var geojson;
 
 // Grab data with d3
-d3.json(geoData, function (data) {
-  d3.csv("Data/wage_by_location.csv", function (locData) {
+d3.json("data/2019_PUMA.geoJson", function (data) {
+  d3.csv("data/wage_by_location.csv", function (locData) {
     console.log(locData);
     console.log(data);
     const locDataMap = new Map();
 
     for (let i = 0; i < locData.length; i++) {
       const element = locData[i];
-      //console.log(element);
+      if (i < 5) {console.log(element)}
       const pumaId = element.IDPUMA;
       const avgWage = Math.round(element.AverageWage);
       locDataMap.set(pumaId, avgWage);
-      // @TODO FIND THE CORRECT FEATURE AND SET THE PROPERTY
-      //data.features.properties.AVGWAGE = avgWage
     }
-    console.log(data.features);
+    console.log(locDataMap);
     for (let j = 0; j < data.features.length; j++) {
       const element = data.features[j];
       if (j < 5) {console.log(element)}
