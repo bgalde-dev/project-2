@@ -20,8 +20,8 @@ var geoData = "data/2019_PUMA.geoJson";
 var geojson;
 
 // Grab data with d3
-d3.json("data/2019_PUMA.geoJson", function (data) {
-  d3.csv("data/wage_by_location.csv", function (locData) {
+d3.json("Data/2019_PUMA.json", function (data) {
+  d3.csv("Data/wage_by_location.csv", function (locData) {
     console.log(locData);
     console.log(data);
     const locDataMap = new Map();
@@ -33,7 +33,7 @@ d3.json("data/2019_PUMA.geoJson", function (data) {
       const avgWage = Math.round(element.AverageWage);
       locDataMap.set(pumaId, avgWage);
     }
-    console.log(locDataMap);
+    console.log(data);
     for (let j = 0; j < data.features.length; j++) {
       const element = data.features[j];
       if (j < 5) {console.log(element)}

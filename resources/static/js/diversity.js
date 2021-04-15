@@ -2,7 +2,6 @@
 function init() {
     var dropdown = d3.select("#selDataset");
     console.log("*** init()");
-    console.log(d3.version);
     d3.csv("/data/GenderComposition.csv").then(function (data) {
         
         var yearList = []
@@ -19,7 +18,7 @@ function init() {
         getDiversity(yearList[0]);
         getOccupations(yearList[0]);
         getWages(yearList[0]);
-        //getWageMap(yearList[0]);
+        getWageMap(yearList[0]);
     });
 };
 
@@ -29,7 +28,7 @@ function optionChanged(year) {
     getDiversity(year);
     getOccupations(year);
     getWages(year);
-    //getWageMap(year);
+    getWageMap(year);
 }
 
 // this is our main function to generate our charts based on dropdown selection
@@ -167,7 +166,7 @@ function getDiversity(year) {
             return d.year === year;
         });
 
-        console.log(filtered);
+        //console.log(filtered);
         var joblabel = [...new Set(joblist)];
 
         var racelabel = [...new Set(racelist)];
@@ -285,7 +284,7 @@ function getDiversity(year) {
 
 function getOccupations(year) {
     console.log("*** getOccupations()");
-    d3.csv("./Data/Occupations_by_Share.csv").then((importedData) => {
+    d3.csv("/data/Occupations_by_Share.csv").then((importedData) => {
 
         // Setting a variable for the metadata and samples portions of the json.
 
@@ -305,14 +304,14 @@ function getOccupations(year) {
             }
         }
 
-        console.log(occupations);
-        console.log(totalPop);
+        //console.log(occupations);
+        //console.log(totalPop);
 
         var treeData = [
             { name: `Total Population: ${totalPop}`, children: [] }
         ];
 
-        console.log(Object.keys(occupations));
+        //console.log(Object.keys(occupations));
 
         let k = 0;
 
@@ -325,7 +324,7 @@ function getOccupations(year) {
                 k++;
             }
         }
-        console.log(treeData);
+        //console.log(treeData);
 
         anychart.onDocumentReady(function () {
             var treeChart = d3.select("#occupations");
@@ -360,7 +359,7 @@ function getOccupations(year) {
 function getWages(year) {
     console.log("*** getWages()");
     d3.csv("data/average_salary.csv").then(function (data) {
-        console.log(data);
+        //console.log(data);
         // Create objects with Industry Group and Average Wage
         var results = d3.nest()
             .key(d => d["IndustryGroup"])
@@ -369,7 +368,7 @@ function getWages(year) {
 
         results.sort((a, b) => (a.value > b.value) ? 1 : -1);
 
-        console.log(results);
+        //console.log(results);
 
         // x
         var names = results.map(r => r.key).slice(0, 10);
@@ -377,9 +376,9 @@ function getWages(year) {
         // y
         var averageWage = results.map(r => r.value).slice(0, 10);
 
-        console.log(names);
+        //console.log(names);
 
-        console.log(averageWage);
+        //console.log(averageWage);
 
         // Bar chart
         var barData = [{
@@ -407,7 +406,7 @@ function getWages(year) {
     });
 }
 
-function getWageMap(year) {
+function getWageMapOld(year) {
     console.log("*** getWageMap()");
     // Creating map object
     var myMap = L.map("salaryMap", {
@@ -426,15 +425,16 @@ function getWageMap(year) {
     }).addTo(myMap);
 
     // Load in geojson data
-    var geoData = "data/2019_PUMA.geoJson";
+    var geoData = "data/wage_by_location.csv";
 
-    var geojson;
+    var geojson = "data/2019_PUMA.geoJson";;
     console.log(geoData);
 
     // Grab data with d3
-    d3.json(geoData, function (data) {
+    d3.json(geoData).then(function (data) {
+        
         console.log(data);
-        d3.csv("data/wage_by_location.csv", function (locData) {
+        d3.csv(geoData, function (locData) {
             console.log(locData);
             
             const locDataMap = new Map();
@@ -512,8 +512,207 @@ function getWageMap(year) {
             // Adding legend to the map
             legend.addTo(myMap);
 
-        });
+        }).catch(function(error) {
+            console.log(error);
+          });
+    }).catch(function(error) {
+        console.log(error);
     });
+    
+}
+
+function getWageMap(year) {
+    var wageMap = L.map('salaryMap').setView([37.8, -96], 4);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/light-v9',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(wageMap);
+
+
+	// control that shows state info on hover
+	var info = L.control();
+
+	info.onAdd = function (wageMap) {
+		this._div = L.DomUtil.create('div', 'info');
+		this.update();
+		return this._div;
+	};
+
+	info.update = function (props) {
+		this._div.innerHTML = '<h4>PUMA Average Wage</h4>' +  (props ?
+			'<b>' + props.name + '</b><br />' + props.AVGWAGE + ' people / mi<sup>2</sup>'
+			: 'Hover over a state');
+	};
+
+	info.addTo(wageMap);
+
+
+	// get color depending on population avg wage value
+	function getColor(d) {
+		return d > 100000 ? '#800026' :
+				d > 50000  ? '#BD0026' :
+				d > 20000  ? '#E31A1C' :
+				d > 10000  ? '#FC4E2A' :
+				d > 5000   ? '#FD8D3C' :
+				d > 2000   ? '#FEB24C' :
+				d > 10   ? '#FED976' :
+							'#FFEDA0';
+	}
+
+	function style(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor(feature.properties.AVGWAGE)
+		};
+	}
+
+	function highlightFeature(e) {
+		var layer = e.target;
+
+		layer.setStyle({
+			weight: 5,
+			color: '#666',
+			dashArray: '',
+			fillOpacity: 0.7
+		});
+
+		if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+			layer.bringToFront();
+		}
+
+		info.update(layer.feature.properties);
+	}
+
+	var geojson;
+
+	function resetHighlight(e) {
+		geojson.resetStyle(e.target);
+		info.update();
+	}
+
+	function zoomToFeature(e) {
+		wageMap.fitBounds(e.target.getBounds());
+	}
+
+	function onEachFeature(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			click: zoomToFeature
+		});
+	}
+
+    var geoData = "data/wage_by_location.csv";
+
+    var geojsonData = "data/2019_PUMA.geoJson";;
+
+    // ********************************************
+    d3.json(geojsonData).then(function (data) {
+        
+        console.log(data);
+        d3.csv(geoData, function (locData) {
+            console.log(locData);
+            
+            const locDataMap = new Map();
+
+            for (let i = 0; i < locData.length; i++) {
+                const element = locData[i];
+                //console.log(element);
+                const pumaId = element.IDPUMA;
+                const avgWage = Math.round(element.AverageWage);
+                locDataMap.set(pumaId, avgWage);
+            }
+            console.log(data.features);
+            for (let j = 0; j < data.features.length; j++) {
+                const element = data.features[j];
+                if (j < 5) { console.log(element) }
+                element.properties.AVGWAGE = locDataMap.get(element.properties.AFFGEOID10);
+            }
+            console.log(data);
+            geojson = L.geoJson(data, {
+                style: style,
+                onEachFeature: onEachFeature
+            }).addTo(wageMap);
+        
+            wageMap.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">US Census Bureau</a>');
+            // Create a new choropleth layer
+            // geojson = L.choropleth(data, {
+
+            //     // Define what  property in the features to use
+            //     valueProperty: "AVGWAGE",
+
+            //     // Set color scale
+            //     scale: ["#ffffb2", "#b10026"],
+
+            //     // Number of breaks in step range
+            //     steps: 10,
+
+            //     // q for quartile, e for equidistant, k for k-means
+            //     mode: "q",
+            //     style: {
+            //         // Border color
+            //         color: "#fff",
+            //         weight: 1,
+            //         fillOpacity: 0.8
+            //     },
+
+            //     // Binding a pop-up to each layer
+            //     onEachFeature: function (feature, layer) {
+            //         layer.bindPopup("Name: " + feature.properties.NAME10 + "<br>Average Wage:<br>" +
+            //             "$" + feature.properties.AVGWAGE);
+            //     }
+
+            // }).addTo(myMap);
+
+            // Set up the legend
+            console.log(geojson);
+            console.log(geojson.options);
+            
+            var legend = L.control({ position: "bottomleft" });
+            legend.onAdd = function () {
+                var div = L.DomUtil.create("div", "info legend");
+                var limits = geojson.options.limits;
+                console.log(limits);
+                var colors = geojson.options.colors;
+                var labels = [];
+
+                // Add min & max
+                var legendInfo = "<h1>Average Wage</h1>" +
+                    "<div class=\"labels\">" +
+                    "<div class=\"min\">" + limits[0] + "</div>" +
+                    "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+                    "</div>";
+
+                div.innerHTML = legendInfo;
+
+                limits.forEach(function (limit, index) {
+                    labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+                });
+
+                div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+                return div;
+            };
+
+            // Adding legend to the wageMap
+            legend.addTo(wageMap);
+
+        }).catch(function(error) {
+            console.log(error);
+          });
+    }).catch(function(error) {
+        console.log(error);
+    });
+    // ********************************************
+	
 }
 
 init();
